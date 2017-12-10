@@ -9,4 +9,7 @@ I implemented on
 - Python 3.6
 - tensorflow 1.4
 
+Original paper and this model use bAbi dataset for QA Task.
+Check more details here : https://research.fb.com/downloads/babi/
+
 ![alt tag](http://i.imgur.com/nv89JLc.png)

@@ -22,6 +22,7 @@ flags.DEFINE_string("data_dir", "data", "data directory [data]")
 flags.DEFINE_string("checkpoint_dir", "checkpoints", "checkpoint directory [checkpoints]")
 flags.DEFINE_string("data_name", "qa1", "data set name qa#")
 flags.DEFINE_boolean("is_test", False, "True for testing, False for Training [False]")
+# flags.DEFINE_string("log_dir", "./board/test3", "log dir for tenserboard")
 
 FLAGS = flags.FLAGS
 
@@ -39,13 +40,7 @@ def main(_):
     idx2word = dict(zip(word2idx.values(), word2idx.keys()))
 
     max = 0
-    for i in train_data:
-        if len(i) > max:
-            max = len(i)
-    for i in valid_data:
-        if len(i) > max:
-            max = len(i)
-    for i in test_data:
+    for i in train_data, valid_data, test_data:
         if len(i) > max:
             max = len(i)
 

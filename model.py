@@ -19,7 +19,6 @@ class MemN2N(object):
         self.mem_size = config.mem_size
         self.max_grad_norm = config.max_grad_norm
         self.max_len = config.max_len
-
         self.is_test = config.is_test
         self.checkpoint_dir = config.checkpoint_dir
 
@@ -32,9 +31,6 @@ class MemN2N(object):
         self.context = tf.placeholder(tf.int32, [self.batch_size, self.mem_size, self.max_len], name="context")
 
         self.hid = []
-        self.share_list = []
-        self.share_list.append([])
-
         self.lr = None
         self.current_lr = config.init_lr
         self.loss = None
@@ -45,7 +41,8 @@ class MemN2N(object):
 
         self.sess = sess
         self.log_loss = []
-        self.log_perp = []
+
+        # self.writer = tf.summary.FileWriter(config.log_dir, sess.graph)
 
     def build_memory(self):
         self.global_step = tf.Variable(0, name="global_step")
@@ -208,7 +205,6 @@ class MemN2N(object):
 
                 # Logging
                 self.log_loss.append([train_loss, test_loss])
-                self.log_perp.append([math.exp(train_loss), math.exp(test_loss)])
 
                 state = {
                     'train_error': math.exp(train_loss),
@@ -231,14 +227,12 @@ class MemN2N(object):
         else:
             self.load()
             valid_loss = np.sum(self.test(train_data, label='Validation'))
-            valid_accuracy = self.accuracy
             test_loss = np.sum(self.test(test_data, label='Test'))
             test_accuracy = self.accuracy
 
             state = {
                 'valid_error': math.exp(valid_loss),
                 'test_error': math.exp(test_loss),
-                'valid_accuracy': valid_accuracy,
                 'test_accuracy': test_accuracy
             }
             print(state)
